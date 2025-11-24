@@ -24,7 +24,6 @@ async function iniciarBusca() {
     );
 
     renderizarCards(dadosFiltrados);
-
     /*campoBusca.addEventListener("input", () => {
         let termoBuscado = campoBusca.value.toLowerCase();
         let resultados = dados.filter(dado =>
