@@ -1,0 +1,53 @@
+let cardContainer = document.querySelector(".card-container");
+let campoBusca = document.querySelector("header input");
+let dados = [];
+
+async function iniciarBusca() {
+
+    if (dados.length === 0) {
+        try {
+            let resposta = await fetch("data.json");
+            dados = await resposta.json();
+        } catch (erro) {
+            console.error("Falha ao buscar dados:", erro);
+            return;
+        }
+    }
+
+    /*let resposta = await fetch("data.json");
+    dados = await resposta.json();
+    renderizarCards(dados);*/
+    const termosBusca = campoBusca.value.toLowerCase();
+    const dadosFiltrados = dados.filter(dado => 
+        dado.nome.toLowerCase().includes(termosBusca) ||
+        dado.descricao.toLowerCase().includes(termosBusca)
+    );
+
+    renderizarCards(dadosFiltrados);
+
+    /*campoBusca.addEventListener("input", () => {
+        let termoBuscado = campoBusca.value.toLowerCase();
+        let resultados = dados.filter(dado =>
+            dado.nome.toLowerCase().includes(termoBuscado) ||
+            dado.descrição.toLowerCase().includes(termoBuscado)
+        );
+        renderizarCards(resultados);
+    });*/
+}
+
+function renderizarCards(dados) {
+    cardContainer.innerHTML = "";
+    for (let dado of dados) {
+        let article = document.createElement("article");
+        article.classList.add("card");
+        article.innerHTML = `
+            <h2>${dado.nome}</h2>
+            <p>${dado.data_criacao}</p>
+            <p>${dado.descricao}</p>
+            <a href="${dado.link}" target="_blank">Saiba mais</a>
+        `
+        cardContainer.appendChild(article);
+    } 
+}
+
+iniciarBusca();
